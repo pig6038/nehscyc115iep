@@ -55,6 +55,13 @@
             font-size: 0.95rem;
         }
 
+        /* 針對單選/多選框的微調 */
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
         input[type="text"]:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #3b82f6;
@@ -66,6 +73,10 @@
             resize: vertical;
             min-height: 80px;
         }
+
+        /* 粗框樣式 */
+        .thick-border-top { border-top: 3px solid #000 !important; border-left: 3px solid #000 !important; border-right: 3px solid #000 !important; }
+        .thick-border-bottom { border-bottom: 3px solid #000 !important; border-left: 3px solid #000 !important; border-right: 3px solid #000 !important; }
 
         @media print {
             @page {
@@ -190,14 +201,16 @@
             <tr>
                 <th>教學調整</th>
                 <td colspan="3">
-                    <select class="mb-2">
+                    <!-- 加入 onchange 事件判斷是否顯示文字框 -->
+                    <select class="mb-2" onchange="document.getElementById('adjustment_detail').style.display = (this.value === '不需調整' || this.value === '') ? 'none' : 'block'">
                         <option value="" disabled selected>請選擇教學調整方式...</option>
                         <option value="不需調整">不需調整</option>
                         <option value="調整內容">調整內容</option>
                         <option value="歷程調整">歷程調整</option>
                         <option value="環境調整">環境調整</option>
                     </select>
-                    <input type="text" placeholder="補充說明或其他調整細節...">
+                    <!-- 預設隱藏此欄位 -->
+                    <input type="text" id="adjustment_detail" style="display: none;" placeholder="補充說明或其他調整細節...">
                 </td>
             </tr>
 
@@ -261,19 +274,35 @@
                 </td>
             </tr>
 
-            <!-- 4. 期末評量結果 -->
+            <!-- 4. 期末評量結果 (加上粗框與提示字) -->
             <tr>
-                <th colspan="4" class="text-left bg-gray-100 p-2 font-bold">4. 期末評量結果</th>
+                <th colspan="4" class="text-left bg-gray-100 p-2 font-bold thick-border-top">
+                    4. 期末評量結果 
+                    <span class="text-red-600 font-normal ml-2 text-sm print-hide">（※ 此部分期末再填寫）</span>
+                </th>
             </tr>
             <tr>
-                <td colspan="4">
-                    <select>
-                        <option value="" disabled selected>請選擇評量結果...</option>
-                        <option value="通過">通過</option>
-                        <option value="不通過">不通過</option>
-                        <option value="補考後通過">補考後通過</option>
-                        <option value="補考後不通過">補考後不通過</option>
-                    </select>
+                <td colspan="4" class="thick-border-bottom p-4">
+                    <div class="flex flex-col space-y-3">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox"> <span>通過</span>
+                        </label>
+                        <div class="flex items-center space-x-2">
+                            <label class="flex items-center space-x-2 whitespace-nowrap">
+                                <input type="checkbox"> <span>不通過，原因：</span>
+                            </label>
+                            <input type="text" class="flex-grow border-b border-gray-400 bg-transparent rounded-none focus:border-blue-500 !p-1" placeholder="請填寫原因...">
+                        </div>
+                        <label class="flex items-center space-x-2 mt-2">
+                            <input type="checkbox"> <span>補考後通過</span>
+                        </label>
+                        <div class="flex items-center space-x-2">
+                            <label class="flex items-center space-x-2 whitespace-nowrap">
+                                <input type="checkbox"> <span>補考後不通過，原因：</span>
+                            </label>
+                            <input type="text" class="flex-grow border-b border-gray-400 bg-transparent rounded-none focus:border-blue-500 !p-1" placeholder="請填寫原因...">
+                        </div>
+                    </div>
                 </td>
             </tr>
 
